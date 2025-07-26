@@ -36,6 +36,7 @@ const getImageUrl = (imagePath) => {
             />
             <h3>{prod.name}</h3>
             <p>${prod.price}</p>
+            <p>Stock: {prod.stock}</p>
           </div>
         ))}
       </div>
