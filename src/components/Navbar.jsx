@@ -9,7 +9,7 @@ export default function AppNavbar() {
 
   const handleLogout = () => {
     logout();
-    navigate('/'); 
+    navigate('/');
   };
 
   return (
@@ -17,7 +17,7 @@ export default function AppNavbar() {
       expand="lg" 
       sticky="top" 
       className="shadow-sm"
-      style={{ background: '#222', color: '#fff' }}  // navbar oscuro
+      style={{ background: '#222', color: '#fff' }}
     >
       <Container>
         <Navbar.Brand as={Link} to="/" style={{ color: '#f8f9fa', fontWeight: 'bold', fontSize: '1.3rem' }}>
@@ -27,54 +27,34 @@ export default function AppNavbar() {
         <Navbar.Toggle aria-controls="main-navbar" style={{ borderColor: '#f8f9fa' }} />
         <Navbar.Collapse id="main-navbar">
           <Nav className="me-auto">
-            <Nav.Link as={NavLink} to="/" end style={{ color: '#ddd' }}>
-              Inicio
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/products" style={{ color: '#ddd' }}>
-              Productos
-            </Nav.Link>
+            <Nav.Link as={NavLink} to="/" end style={{ color: '#ddd' }}>Inicio</Nav.Link>
+            <Nav.Link as={NavLink} to="/products" style={{ color: '#ddd' }}>Productos</Nav.Link>
           </Nav>
 
           <Nav className="ms-auto align-items-center">
             {!isAuthenticated ? (
               <>
-                <Button 
-                  variant="outline-light" 
-                  as={Link} 
-                  to="/login" 
-                  className="me-2"
-                  style={{ borderRadius: '20px', padding: '6px 16px' }}
-                >
+                <Button variant="outline-light" as={Link} to="/login" className="me-2" style={{ borderRadius: '20px', padding: '6px 16px' }}>
                   Iniciar sesión
                 </Button>
-                <Button 
-                  variant="light" 
-                  as={Link} 
-                  to="/register"
-                  style={{ borderRadius: '20px', padding: '6px 16px', fontWeight: '500' }}
-                >
+                <Button variant="light" as={Link} to="/register" style={{ borderRadius: '20px', padding: '6px 16px', fontWeight: '500' }}>
                   Crear cuenta
                 </Button>
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to="/perfil" style={{ color: '#f8f9fa' }}>
-                  Mi perfil
-                </Nav.Link>
+                <Nav.Link as={Link} to="/perfil" style={{ color: '#f8f9fa' }}>Mi perfil</Nav.Link>
 
                 {user?.role === 'admin' && (
-                  <Nav.Link as={Link} to="/admin" style={{ color: '#f8f9fa' }}>
-                    Panel Admin
-                  </Nav.Link>
+                  <Nav.Link as={Link} to="/admin" style={{ color: '#f8f9fa' }}>Panel Admin</Nav.Link>
                 )}
 
-                <Button 
-                  variant="danger" 
-                  size="sm" 
-                  onClick={handleLogout} 
-                  className="ms-3"
-                  style={{ borderRadius: '20px', padding: '6px 16px' }}
-                >
+                {/* MOSTRAR NOMBRE */}
+                <span style={{ color: '#f8f9fa', marginRight: '12px', fontWeight: '500' }}>
+                  Hola, {user?.nombre || user?.name || user?.email}
+                </span>
+
+                <Button variant="danger" size="sm" onClick={handleLogout} className="ms-3" style={{ borderRadius: '20px', padding: '6px 16px' }}>
                   Cerrar sesión
                 </Button>
               </>
