@@ -1,100 +1,93 @@
-import React, { useState } from 'react';
-import { Container, Card, Form, Button, Alert, InputGroup } from 'react-bootstrap';
+import { useState } from 'react';
+import { Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import './Login.css'; // importa el css que te dejo abajo
-import { Eye, EyeSlash } from 'react-bootstrap-icons'; // opcional: instalar react-bootstrap-icons
 
-export default function LoginBrown() {
-  const { login } = useAuth();
+export default function Login() {
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
 
-  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  const onChange = (e) => {
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  };
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
+    if (!form.email || !form.password) {
+      setError('Completá email y contraseña');
+      return;
+    }
+
     try {
+      setLoadingSubmit(true);
       await login(form.email, form.password);
-      navigate('/');
+      navigate('/'); // o /admin, según tu flujo
     } catch (err) {
-      const msg = err?.response?.data?.message || 'Error al iniciar sesión';
-      setError(msg);
-      setLoading(false);
+      console.error(err);
+      setError(
+        err?.response?.data?.message ||
+        'Credenciales inválidas o error al iniciar sesión'
+      );
+    } finally {
+      setLoadingSubmit(false);
     }
   };
 
   return (
-    <Container className="login-bg d-flex align-items-center justify-content-center">
-      <Card className="login-card">
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '70vh' }}>
+      <Card style={{ width: 380 }} className="shadow-sm">
         <Card.Body>
-          <div className="brand">
-            <div className="logo" aria-hidden="true" />
-            <h3 className="mb-0">Esmae</h3>
-          </div>
+          <h3 className="mb-3 text-center">Iniciar Sesión</h3>
 
-          <h5 className="text-muted mb-3">Iniciar sesión</h5>
+          {error && <Alert variant="danger">{error}</Alert>}
 
-          {error && <Alert variant="warning" onClose={() => setError('')} dismissible>{error}</Alert>}
-
-          <Form onSubmit={onSubmit} className="login-form">
-            <Form.Group className="mb-3" controlId="email">
-              <Form.Label className="small text-muted">Email</Form.Label>
+          <Form onSubmit={onSubmit}>
+            <Form.Group className="mb-3">
+              <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
+                placeholder="tuemail@correo.com"
                 value={form.email}
                 onChange={onChange}
-                placeholder="tu@ejemplo.com"
                 required
-                className="form-input"
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="password">
-              <Form.Label className="small text-muted">Contraseña</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={form.password}
-                  onChange={onChange}
-                  placeholder="••••••••"
-                  required
-                  className="form-input"
-                />
-                <Button
-                  variant="outline-secondary"
-                  onClick={() => setShowPassword((s) => !s)}
-                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-                  className="pw-toggle"
-                >
-                  {showPassword ? <EyeSlash /> : <Eye />}
-                </Button>
-              </InputGroup>
+            <Form.Group className="mb-3">
+              <Form.Label>Contraseña</Form.Label>
+              <Form.Control
+                type="password"
+                name="password"
+                placeholder="Tu contraseña"
+                value={form.password}
+                onChange={onChange}
+                required
+              />
             </Form.Group>
 
-            <div className="d-grid gap-2">
-              <Button type="submit" variant="brown" disabled={loading}>
-                {loading ? 'Ingresando...' : 'Entrar'}
-              </Button>
-              <Button as="a" href="/register" variant="outline-brown">
-                Crear cuenta
+            <div className="d-grid">
+              <Button type="submit" disabled={loadingSubmit}>
+                {loadingSubmit ? <Spinner size="sm" /> : 'Entrar'}
               </Button>
             </div>
           </Form>
 
-          <div className="mt-3 text-center small text-muted">
-            ¿Olvidaste tu contraseña? <a href="/forgot">Restablecer</a>
-          </div>
+          {/* Posible link a registro si luego implementás: 
+          <div className="text-center mt-3">
+            <small>¿No tenés cuenta? <Link to="/register">Registrate</Link></small>
+          </div> */}
         </Card.Body>
       </Card>
-    </Container>
+    </div>
   );
 }

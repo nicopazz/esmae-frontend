@@ -1,85 +1,86 @@
 import React from 'react';
-import { Navbar, Container, Nav, NavDropdown, Offcanvas, Button } from 'react-bootstrap';
-import { NavLink, Link } from 'react-router-dom';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-// Navbar moderno en MODO OSCURO usando React-Bootstrap.
-// Solución al problema de la línea superior en botones: se debía a la clase border-top.
-// Eliminamos esa clase y ajustamos los botones para que no muestren borde innecesario.
-
-export default function NavbarRB() {
+export default function AppNavbar() {
   const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/'); 
+  };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" className="shadow-sm" sticky="top">
+    <Navbar 
+      expand="lg" 
+      sticky="top" 
+      className="shadow-sm"
+      style={{ background: '#222', color: '#fff' }}  // navbar oscuro
+    >
       <Container>
-        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="me-2"
-            aria-hidden="true"
-          >
-            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
-          </svg>
-          <span className="fw-bold">Esmae</span>
+        <Navbar.Brand as={Link} to="/" style={{ color: '#f8f9fa', fontWeight: 'bold', fontSize: '1.3rem' }}>
+          Esmae
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls={`offcanvas-navbar`} />
+        <Navbar.Toggle aria-controls="main-navbar" style={{ borderColor: '#f8f9fa' }} />
+        <Navbar.Collapse id="main-navbar">
+          <Nav className="me-auto">
+            <Nav.Link as={NavLink} to="/" end style={{ color: '#ddd' }}>
+              Inicio
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/products" style={{ color: '#ddd' }}>
+              Productos
+            </Nav.Link>
+          </Nav>
 
-        <Navbar.Offcanvas
-          id={`offcanvas-navbar`}
-          aria-labelledby={`offcanvas-navbar-label`}
-          placement="end"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id={`offcanvas-navbar-label`}>Esmae</Offcanvas.Title>
-          </Offcanvas.Header>
+          <Nav className="ms-auto align-items-center">
+            {!isAuthenticated ? (
+              <>
+                <Button 
+                  variant="outline-light" 
+                  as={Link} 
+                  to="/login" 
+                  className="me-2"
+                  style={{ borderRadius: '20px', padding: '6px 16px' }}
+                >
+                  Iniciar sesión
+                </Button>
+                <Button 
+                  variant="light" 
+                  as={Link} 
+                  to="/register"
+                  style={{ borderRadius: '20px', padding: '6px 16px', fontWeight: '500' }}
+                >
+                  Crear cuenta
+                </Button>
+              </>
+            ) : (
+              <>
+                <Nav.Link as={Link} to="/perfil" style={{ color: '#f8f9fa' }}>
+                  Mi perfil
+                </Nav.Link>
 
-          <Offcanvas.Body>
-            <Nav className="justify-content-start flex-grow-1 pe-3">
-              <Nav.Link as={NavLink} to="/" end>
-                Inicio
-              </Nav.Link>
-              <Nav.Link as={NavLink} to="/products">
-                Productos
-              </Nav.Link>
-              {/* <Nav.Link as={NavLink} to="/about">Nosotros</Nav.Link> */}
-            </Nav>
+                {user?.role === 'admin' && (
+                  <Nav.Link as={Link} to="/admin" style={{ color: '#f8f9fa' }}>
+                    Panel Admin
+                  </Nav.Link>
+                )}
 
-            <div className="mt-3 mt-lg-0">
-              {isAuthenticated ? (
-                <div className="d-flex align-items-center justify-content-between">
-                  <NavDropdown title={`Hola, ${user?.name ?? 'Usuario'}`} id="user-dropdown">
-                    <NavDropdown.Item as={NavLink} to="/profile">
-                      Perfil
-                    </NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item
-                      onClick={() => {
-                        logout();
-                      }}
-                    >
-                      Cerrar sesión
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </div>
-              ) : (
-                <div className="d-flex gap-2">
-                  <Button as={NavLink} to="/login" variant="outline-light" className="shadow-none border-0">
-                    Ingresar
-                  </Button>
-                  <Button as={NavLink} to="/register" variant="light" className="shadow-none border-0">
-                    Crear cuenta
-                  </Button>
-                </div>
-              )}
-            </div>
-          </Offcanvas.Body>
-        </Navbar.Offcanvas>
+                <Button 
+                  variant="danger" 
+                  size="sm" 
+                  onClick={handleLogout} 
+                  className="ms-3"
+                  style={{ borderRadius: '20px', padding: '6px 16px' }}
+                >
+                  Cerrar sesión
+                </Button>
+              </>
+            )}
+          </Nav>
+        </Navbar.Collapse>
       </Container>
     </Navbar>
   );
