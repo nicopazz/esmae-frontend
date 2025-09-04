@@ -1,4 +1,5 @@
-import { Card, Button, Badge } from 'react-bootstrap';
+import React from 'react';
+import { Card } from 'react-bootstrap';
 
 export default function ProductCard({ product }) {
   const imageUrl = product.image?.startsWith('http')
@@ -8,29 +9,16 @@ export default function ProductCard({ product }) {
       : '/no-image.png';
 
   return (
-    <Card className="h-100 shadow-sm">
-      <div style={{ height: 220, overflow: 'hidden' }}>
-        <Card.Img
-          variant="top"
-          src={imageUrl}
-          alt={product.name}
-          style={{ width: '100%', height: 220, objectFit: 'cover' }}
-        />
+    <Card className="product-card h-100">
+      <div className="product-image">
+        <img src={imageUrl} alt={product.name} className="card-img-top" />
       </div>
 
       <Card.Body className="d-flex flex-column">
-        <div className="d-flex justify-content-between align-items-start">
-          <Card.Title className="mb-1">{product.name}</Card.Title>
-          {product.category && <Badge bg="secondary">{product.category}</Badge>}
-        </div>
-
-        <Card.Text className="text-muted" style={{ minHeight: 48 }}>
-          {product.description?.substring(0, 60)}...
-        </Card.Text>
-
-        <div className="mt-auto d-flex justify-content-between align-items-center">
-          <strong>${product.price?.toLocaleString('es-AR')}</strong>
-          {/* Si luego agregás carrito: <Button size="sm">Agregar</Button> */}
+        <h5 className="product-title">{product.name}</h5>
+        <div className="description">{product.description?.substring(0, 80)}...</div>
+        <div className="mt-auto">
+          <div className="price product-price">${product.price?.toLocaleString('es-AR')}</div>
         </div>
       </Card.Body>
     </Card>

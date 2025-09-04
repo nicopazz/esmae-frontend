@@ -14,7 +14,7 @@ export default function Filters({ onChange }) {
       category: category.trim(),
       minPrice: minPrice || undefined,
       maxPrice: maxPrice || undefined,
-      page: 1, // siempre reseteamos a la primera página
+      page: 1,
     });
   };
 
@@ -27,45 +27,47 @@ export default function Filters({ onChange }) {
   };
 
   return (
-    <Form onSubmit={handleSubmit} className="mb-4">
-      <Row className="g-2 align-items-end">
-        <Col md={4}>
-          <Form.Label>Buscar</Form.Label>
+    <Form onSubmit={handleSubmit} className="filters-form">
+      <Row className="g-2 align-items-center w-100">
+        <Col md={3}>
           <Form.Control
-            placeholder="Nombre o descripción"
+            placeholder="Buscar producto..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </Col>
+
+       {/* -- Activar cuando se tenga más de una categoría --
         <Col md={3}>
-          <Form.Label>Categoría</Form.Label>
           <Form.Control
-            placeholder="Ej: Espejos"
+            placeholder="Categoría (Ej: Espejos)"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           />
         </Col>
+      */}
+      
         <Col md={2}>
-          <Form.Label>Precio Mín.</Form.Label>
           <Form.Control
             type="number"
             min={0}
+            placeholder="Precio mín."
             value={minPrice}
             onChange={(e) => setMin(e.target.value)}
           />
         </Col>
         <Col md={2}>
-          <Form.Label>Precio Máx.</Form.Label>
           <Form.Control
             type="number"
             min={0}
+            placeholder="Precio máx."
             value={maxPrice}
             onChange={(e) => setMax(e.target.value)}
           />
         </Col>
-        <Col md={1} className="d-flex gap-2">
-          <Button type="submit" variant="primary">Filtrar</Button>
-          <Button type="button" variant="outline-secondary" onClick={handleClear}>Limpiar</Button>
+        <Col md={2} className="d-flex gap-2">
+          <Button type="submit" className="btn-filter w-100">Filtrar</Button>
+          <Button type="button" className="btn-clear w-100" onClick={handleClear}>Limpiar</Button>
         </Col>
       </Row>
     </Form>

@@ -1,67 +1,62 @@
 import React from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-export default function AppNavbar() {
+export default function AppNavbar(){
   const { isAuthenticated, user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
 
   return (
-    <Navbar 
-      expand="lg" 
-      sticky="top" 
-      className="shadow-sm"
-      style={{ background: '#222', color: '#fff' }}
-    >
-      <Container>
-        <Navbar.Brand as={Link} to="/" style={{ color: '#f8f9fa', fontWeight: 'bold', fontSize: '1.3rem' }}>
-          Esmae
-        </Navbar.Brand>
+    <>
+      {/* Topbar */}
+      <div className="topbar">Envíos seleccionados • Atención al cliente 9–18</div>
 
-        <Navbar.Toggle aria-controls="main-navbar" style={{ borderColor: '#f8f9fa' }} />
-        <Navbar.Collapse id="main-navbar">
-          <Nav className="me-auto">
-            <Nav.Link as={NavLink} to="/" end style={{ color: '#ddd' }}>Inicio</Nav.Link>
-            <Nav.Link as={NavLink} to="/products" style={{ color: '#ddd' }}>Productos</Nav.Link>
-          </Nav>
+      <Navbar expand="lg" className="navbar-custom" bg="light">
+        <Container className="position-relative">
+          
+          {/* Brand centrado */}
+          <Navbar.Brand className="brand-center">
+            <Link to="/" className="brand-logo">Esmae</Link>
+          </Navbar.Brand>
 
-          <Nav className="ms-auto align-items-center">
-            {!isAuthenticated ? (
-              <>
-                <Button variant="outline-light" as={Link} to="/login" className="me-2" style={{ borderRadius: '20px', padding: '6px 16px' }}>
-                  Iniciar sesión
-                </Button>
-                <Button variant="light" as={Link} to="/register" style={{ borderRadius: '20px', padding: '6px 16px', fontWeight: '500' }}>
-                  Crear cuenta
-                </Button>
-              </>
-            ) : (
-              <>
-                <Nav.Link as={Link} to="/perfil" style={{ color: '#f8f9fa' }}>Mi perfil</Nav.Link>
+          {/* Toggle para móvil */}
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
-                {user?.role === 'admin' && (
-                  <Nav.Link as={Link} to="/admin" style={{ color: '#f8f9fa' }}>Panel Admin</Nav.Link>
-                )}
+          <Navbar.Collapse id="basic-navbar-nav">
+            {/* Links de navegación */}
+            <Nav className="me-auto">
+              <Nav.Link as={NavLink} to="/">Home</Nav.Link>
+              <Nav.Link as={NavLink} to="/products">Productos</Nav.Link>
+              <Nav.Link as={NavLink} to="/about">Nosotros</Nav.Link>
+              <Nav.Link as={NavLink} to="/account">Cuenta</Nav.Link>
+            </Nav>
 
-                {/* MOSTRAR NOMBRE */}
-                <span style={{ color: '#f8f9fa', marginRight: '12px', fontWeight: '500' }}>
-                  Hola, {user?.nombre || user?.name || user?.email}
-                </span>
-
-                <Button variant="danger" size="sm" onClick={handleLogout} className="ms-3" style={{ borderRadius: '20px', padding: '6px 16px' }}>
+            {/* Botón de login/logout a la derecha */}
+            <Nav className="ms-auto d-flex align-items-center">
+              {isAuthenticated ? (
+                <Button
+                  variant="outline-dark"
+                  size="sm"
+                  onClick={logout}
+                  className="ms-2"
+                >
                   Cerrar sesión
                 </Button>
-              </>
-            )}
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+              ) : (
+                <Button
+                  as={Link}
+                  to="/login"
+                  variant="outline-dark"
+                  size="sm"
+                  className="ms-2"
+                >
+                  Ingresar
+                </Button>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </>
   );
 }

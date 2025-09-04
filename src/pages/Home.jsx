@@ -4,6 +4,7 @@ import api from '../api/client';
 import ProductCard from '../components/ProductCard';
 import Filters from '../components/Filters';
 import Paginator from '../components/Paginator';
+import Hero from '../components/Hero';
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -70,9 +71,10 @@ export default function Home() {
   };
 
   return (
-    <>
-      <h1 className="mb-4">Productos</h1>
+  <>
+    <Hero />
 
+    <div className="home-container">
       <Filters onChange={handleFiltersChange} />
 
       {loading && (
@@ -87,7 +89,7 @@ export default function Home() {
         <Alert variant="info">No se encontraron productos.</Alert>
       )}
 
-      <Row className="g-3">
+      <Row className="g-4">
         {products.map((prod) => (
           <Col key={prod._id} xs={12} sm={6} md={4} lg={3}>
             <ProductCard product={prod} />
@@ -100,6 +102,8 @@ export default function Home() {
         pages={pageInfo.pages || 1}
         onChange={handlePageChange}
       />
-    </>
-  );
+    </div>
+  </>
+);
+
 }
