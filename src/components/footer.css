@@ -1,0 +1,20 @@
+.footer {
+  border-top: 1px solid #ddd;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.footer h5 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.footer-icon {
+  color: var(--text);
+  transition: color 0.3s, transform 0.3s;
+}
+
+.footer-icon:hover {
+  color: var(--accent);
+  transform: translateY(-3px);
+}

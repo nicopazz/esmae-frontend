@@ -6,6 +6,7 @@ import Filters from '../components/Filters';
 import Paginator from '../components/Paginator';
 import Hero from '../components/Hero';
 
+
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [pageInfo, setPageInfo] = useState({ page: 1, pages: 1, total: 0 });
@@ -74,35 +75,36 @@ export default function Home() {
   <>
     <Hero />
 
-    <div className="home-container">
-      <Filters onChange={handleFiltersChange} />
+    <div id="productos" className="home-container">
+  <Filters onChange={handleFiltersChange} />
 
-      {loading && (
-        <div className="text-center my-5">
-          <Spinner animation="border" />
-        </div>
-      )}
-
-      {error && <Alert variant="danger">{error}</Alert>}
-
-      {!loading && !error && products.length === 0 && (
-        <Alert variant="info">No se encontraron productos.</Alert>
-      )}
-
-      <Row className="g-4">
-        {products.map((prod) => (
-          <Col key={prod._id} xs={12} sm={6} md={4} lg={3}>
-            <ProductCard product={prod} />
-          </Col>
-        ))}
-      </Row>
-
-      <Paginator
-        page={pageInfo.page || 1}
-        pages={pageInfo.pages || 1}
-        onChange={handlePageChange}
-      />
+  {loading && (
+    <div className="text-center my-5">
+      <Spinner animation="border" />
     </div>
+  )}
+
+  {error && <Alert variant="danger">{error}</Alert>}
+
+  {!loading && !error && products.length === 0 && (
+    <Alert variant="info">No se encontraron productos.</Alert>
+  )}
+
+  <Row className="g-4">
+    {products.map((prod) => (
+      <Col key={prod._id} xs={12} sm={6} md={4} lg={3}>
+        <ProductCard product={prod} />
+      </Col>
+    ))}
+  </Row>
+
+  <Paginator
+    page={pageInfo.page || 1}
+    pages={pageInfo.pages || 1}
+    onChange={handlePageChange}
+  />
+</div>
+
   </>
 );
 

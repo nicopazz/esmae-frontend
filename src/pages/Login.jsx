@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import '../pages/login.css';
 
 export default function Login() {
   const { login, isAuthenticated } = useAuth();
@@ -30,12 +31,12 @@ export default function Login() {
     try {
       setLoadingSubmit(true);
       await login(form.email, form.password);
-      navigate('/'); // o /admin, según tu flujo
+      navigate('/');
     } catch (err) {
       console.error(err);
       setError(
         err?.response?.data?.message ||
-        'Credenciales inválidas o error al iniciar sesión'
+          'Credenciales inválidas o error al iniciar sesión'
       );
     } finally {
       setLoadingSubmit(false);
@@ -43,16 +44,16 @@ export default function Login() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '70vh' }}>
-      <Card style={{ width: 380 }} className="shadow-sm">
+    <div className="login-container">
+      <Card className="login-card shadow">
         <Card.Body>
-          <h3 className="mb-3 text-center">Iniciar Sesión</h3>
+          <h3 className="login-title">Iniciar Sesión</h3>
 
           {error && <Alert variant="danger">{error}</Alert>}
 
           <Form onSubmit={onSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
+              <Form.Label className="login-label">Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
@@ -60,11 +61,12 @@ export default function Login() {
                 value={form.email}
                 onChange={onChange}
                 required
+                className="login-input"
               />
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Contraseña</Form.Label>
+              <Form.Label className="login-label">Contraseña</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
@@ -72,20 +74,16 @@ export default function Login() {
                 value={form.password}
                 onChange={onChange}
                 required
+                className="login-input"
               />
             </Form.Group>
 
             <div className="d-grid">
-              <Button type="submit" disabled={loadingSubmit}>
+              <Button type="submit" className="login-btn" disabled={loadingSubmit}>
                 {loadingSubmit ? <Spinner size="sm" /> : 'Entrar'}
               </Button>
             </div>
           </Form>
-
-          {/* Posible link a registro si luego implementás: 
-          <div className="text-center mt-3">
-            <small>¿No tenés cuenta? <Link to="/register">Registrate</Link></small>
-          </div> */}
         </Card.Body>
       </Card>
     </div>

@@ -66,8 +66,8 @@ export default function Filters({ onChange }) {
           />
         </Col>
         <Col md={2} className="d-flex gap-2">
-          <Button type="submit" className="btn-filter w-100">Filtrar</Button>
-          <Button type="button" className="btn-clear w-100" onClick={handleClear}>Limpiar</Button>
+          <Button type="submit" variant="dark" className="btn-filter w-100">Filtrar</Button>
+          <Button type="button" variant="light" className="btn-clear w-100" onClick={handleClear}>Limpiar</Button>
         </Col>
       </Row>
     </Form>
