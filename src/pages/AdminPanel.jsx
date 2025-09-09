@@ -1,4 +1,3 @@
-// src/pages/AdminPanel.jsx
 import { useEffect, useState } from "react";
 import api from "../api/client"; // tu axios configurado
 import { Table, Button, Modal, Form } from "react-bootstrap";
@@ -7,33 +6,46 @@ export default function AdminPanel() {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Para el modal
+  // Modal
   const [showModal, setShowModal] = useState(false);
-  const [editProducto, setEditProducto] = useState(null); 
-  const [formData, setFormData] = useState({ nombre: "", precio: "", stock: "" });
+  const [editProducto, setEditProducto] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    price: "",
+    stock: "",
+    description: "",
+    image: "", // 👈 ahora es string (link)
+  });
 
   // Cargar productos
- const fetchProductos = async () => {
-  try {
-    const res = await api.get("/products");
-    console.log("Respuesta API:", res.data); 
-    setProductos(res.data.products); 
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
+  const fetchProductos = async () => {
+    try {
+      const res = await api.get("/products");
+      setProductos(res.data.products);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchProductos();
   }, []);
 
-  // Abrir modal para crear o editar
+  // Abrir modal
   const handleShowModal = (producto = null) => {
     setEditProducto(producto);
     setFormData(
-      producto ? { nombre: producto.name, precio: producto.price, stock: producto.stock } : { nombre: "", precio: "", stock: "" }
+      producto
+        ? {
+            name: producto.name,
+            price: producto.price,
+            stock: producto.stock,
+            description: producto.description || "",
+            image: producto.image || "", // 👈 precargamos link
+          }
+        : { name: "", price: "", stock: "", description: "", image: "" }
     );
     setShowModal(true);
   };
@@ -52,7 +64,7 @@ export default function AdminPanel() {
       fetchProductos();
       handleCloseModal();
     } catch (err) {
-      console.error(err);
+      console.error(err.response?.data || err.message);
     }
   };
 
@@ -79,7 +91,9 @@ export default function AdminPanel() {
       <Table striped bordered hover>
         <thead>
           <tr>
+            <th>Imagen</th>
             <th>Nombre</th>
+            <th>Descripción</th>
             <th>Precio</th>
             <th>Stock</th>
             <th>Acciones</th>
@@ -88,22 +102,44 @@ export default function AdminPanel() {
         <tbody>
           {productos.map((p) => (
             <tr key={p._id}>
+              <td>
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  style={{ width: "100px", height: "100px", objectFit: "cover" }}
+                />
+              </td>
               <td>{p.name}</td>
+              <td>{p.description}</td>
               <td>{p.price}</td>
               <td>{p.stock}</td>
               <td>
-                <Button variant="warning" size="sm" onClick={() => handleShowModal(p)}>Editar</Button>{" "}
-                <Button variant="danger" size="sm" onClick={() => handleDelete(p._id)}>Eliminar</Button>
+                <Button
+                  variant="warning"
+                  size="sm"
+                  onClick={() => handleShowModal(p)}
+                >
+                  Editar
+                </Button>{" "}
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => handleDelete(p._id)}
+                >
+                  Eliminar
+                </Button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
 
-      {/* Modal para crear/editar */}
+      {/* Modal */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>{editProducto ? "Editar Producto" : "Crear Producto"}</Modal.Title>
+          <Modal.Title>
+            {editProducto ? "Editar Producto" : "Crear Producto"}
+          </Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
@@ -111,8 +147,10 @@ export default function AdminPanel() {
               <Form.Label>Nombre</Form.Label>
               <Form.Control
                 type="text"
-                value={formData.nombre}
-                onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 required
               />
             </Form.Group>
@@ -120,8 +158,10 @@ export default function AdminPanel() {
               <Form.Label>Precio</Form.Label>
               <Form.Control
                 type="number"
-                value={formData.precio}
-                onChange={(e) => setFormData({ ...formData, precio: e.target.value })}
+                value={formData.price}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: e.target.value })
+                }
                 required
               />
             </Form.Group>
@@ -130,14 +170,55 @@ export default function AdminPanel() {
               <Form.Control
                 type="number"
                 value={formData.stock}
-                onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, stock: e.target.value })
+                }
                 required
               />
             </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Descripción</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+              />
+            </Form.Group>
+
+            {/* 👇 Imagen como link */}
+            <Form.Group className="mb-3">
+              <Form.Label>URL de la Imagen</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.image}
+                onChange={(e) =>
+                  setFormData({ ...formData, image: e.target.value })
+                }
+              />
+              {formData.image && (
+                <img
+                  src={formData.image}
+                  alt="preview"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    marginTop: "10px",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
+            </Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>Cancelar</Button>
-            <Button type="submit" variant="primary">{editProducto ? "Actualizar" : "Crear"}</Button>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Cancelar
+            </Button>
+            <Button type="submit" variant="primary">
+              {editProducto ? "Actualizar" : "Crear"}
+            </Button>
           </Modal.Footer>
         </Form>
       </Modal>

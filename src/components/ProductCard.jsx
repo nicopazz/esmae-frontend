@@ -16,7 +16,7 @@ export default function ProductCard({ product }) {
 
       <Card.Body className="d-flex flex-column">
         <h5 className="product-title">{product.name}</h5>
-        <p className="product-description">{product.description?.substring(0, 80)}...</p>
+        <p className="product-description">{product.description?.substring(0, 80)}</p>
         <div className="mt-auto">
           <div className="product-price">${product.price?.toLocaleString('es-AR')}</div>
         </div>
