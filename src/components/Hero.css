@@ -1,0 +1,78 @@
+/* Estructura general */
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.hero-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  gap: 40px;
+}
+
+/* Texto a la izquierda */
+.hero-left {
+  flex: 1;
+}
+
+.hero-left h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.hero-left p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+/* Carrusel a la derecha */
+.hero-right {
+  flex: 1;
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  object-fit: cover;
+  transition: transform 0.6s ease-in-out, opacity 0.6s ease-in-out;
+}
+
+/* Animación al hacer slide */
+.carousel-item-next .hero-image,
+.carousel-item-prev .hero-image {
+  transform: translateX(20px);
+  opacity: 0.8;
+}
+
+.carousel-item.active .hero-image {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-left h1 {
+    font-size: 2rem;
+  }
+
+  .hero-left p {
+    font-size: 1rem;
+  }
+}
+.smooth-transition {
+  transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+}

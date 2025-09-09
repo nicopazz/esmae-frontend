@@ -1,76 +1,65 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import "./footer.css";
+import { Container } from "react-bootstrap";
 import { BsInstagram, BsWhatsapp } from "react-icons/bs";
 import { SiTiktok } from "react-icons/si";
 import Image from "../public/favicon.ico";
+import "./footer.css";
 
 export default function Footer() {
   return (
-    <footer className="footer bg-light py-4 mt-5">
-      <Container>
-        <Row className="align-items-center text-center text-md-start">
-          {/* Logo - en mobile primero, en desktop al medio */}
-          <Col
-            xs={12}
-            md={{ span: 4, order: 2 }}
-            className="text-center mb-3 mb-md-0"
+    <footer className="footer py-4">
+      <Container className="text-center d-flex flex-column align-items-center">
+        {/* Logo */}
+        <img
+          src={Image}
+          alt="Esmae Logo"
+          width="70"
+          height="70"
+          className="mb-3 footer-logo"
+        />
+
+        {/* Redes sociales */}
+        <div className="d-flex justify-content-center gap-3 mb-3">
+          <a
+            href="https://wa.me/5493813921321"
+            target="_blank"
+            rel="noreferrer"
+            className="footer-icon"
           >
-            <img
-              src={Image}
-              alt="Esmae Logo"
-              width="80"
-              height="80"
-              className="d-inline-block align-top"
-            />
-            <p className="mt-2">
-              Transformá tus espacios con espejos modernos y elegantes.
-            </p>
-          </Col>
-
-          {/* Redes sociales - en mobile después del logo, en desktop a la izquierda */}
-          <Col
-            xs={12}
-            md={{ span: 4, order: 1 }}
-            className="d-flex justify-content-center justify-content-md-start gap-3 mb-3 mb-md-0"
+            <BsWhatsapp size={24} />
+          </a>
+          <a
+            href="https://www.instagram.com/esmae_espejo"
+            target="_blank"
+            rel="noreferrer"
+            className="footer-icon"
           >
-            <a
-              href="https://wa.me/5493813921321"
-              target="_blank"
-              rel="noreferrer"
-              className="footer-icon"
-            >
-              <BsWhatsapp size={24} />
-            </a>
-            <a
-              href="https://www.instagram.com/esmae_espejo"
-              target="_blank"
-              rel="noreferrer"
-              className="footer-icon"
-            >
-              <BsInstagram size={24} />
-            </a>
-            <a
-              href="https://www.tiktok.com/@florencia.salas75"
-              target="_blank"
-              rel="noreferrer"
-              className="footer-icon"
-            >
-              <SiTiktok size={24} />
-            </a>
-          </Col>
+            <BsInstagram size={24} />
+          </a>
+          <a
+            href="https://www.tiktok.com/@florencia.salas75"
+            target="_blank"
+            rel="noreferrer"
+            className="footer-icon"
+          >
+            <SiTiktok size={24} />
+          </a>
+        </div>
 
-          {/* Col vacío en desktop (a la derecha) */}
-          <Col xs={12} md={{ span: 4, order: 3 }}></Col>
-        </Row>
+        {/* Contacto */}
+        <p className="footer-contact mb-1">
+          📞 +54 381 3921321 &nbsp; | &nbsp; ✉️ info@esmae.com
+        </p>
 
-        <Row className="mt-3">
-          <Col className="text-center">
-            <small>
-              &copy; {new Date().getFullYear()} Esmae. Todos los derechos reservados.
-            </small>
-          </Col>
-        </Row>
+        {/* Dirección */}
+        <p className="footer-address mb-3">
+          📍 San Miguel de Tucumán, Argentina
+        </p>
+
+        {/* Copyright */}
+        <small>
+          &copy; {new Date().getFullYear()} Esmae. Todos los derechos reservados.
+        </small>
       </Container>
     </footer>
   );

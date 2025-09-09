@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/client"; // tu axios configurado
-import { Table, Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Card } from "react-bootstrap";
+import "./AdminPanel.css"; // estilos personalizados
 
 export default function AdminPanel() {
   const [productos, setProductos] = useState([]);
@@ -14,10 +15,9 @@ export default function AdminPanel() {
     price: "",
     stock: "",
     description: "",
-    image: "", // 👈 ahora es string (link)
+    image: "",
   });
 
-  // Cargar productos
   const fetchProductos = async () => {
     try {
       const res = await api.get("/products");
@@ -33,7 +33,6 @@ export default function AdminPanel() {
     fetchProductos();
   }, []);
 
-  // Abrir modal
   const handleShowModal = (producto = null) => {
     setEditProducto(producto);
     setFormData(
@@ -43,7 +42,7 @@ export default function AdminPanel() {
             price: producto.price,
             stock: producto.stock,
             description: producto.description || "",
-            image: producto.image || "", // 👈 precargamos link
+            image: producto.image || "",
           }
         : { name: "", price: "", stock: "", description: "", image: "" }
     );
@@ -52,9 +51,14 @@ export default function AdminPanel() {
 
   const handleCloseModal = () => setShowModal(false);
 
-  // Crear o actualizar producto
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.image.trim()) {
+      alert("Debés ingresar la URL de la imagen.");
+      return;
+    }
+
     try {
       if (editProducto) {
         await api.put(`/products/${editProducto._id}`, formData);
@@ -68,7 +72,6 @@ export default function AdminPanel() {
     }
   };
 
-  // Eliminar producto
   const handleDelete = async (id) => {
     if (!window.confirm("¿Eliminar este producto?")) return;
     try {
@@ -79,63 +82,56 @@ export default function AdminPanel() {
     }
   };
 
-  if (loading) return <p>Cargando productos...</p>;
+  if (loading) return <p className="text-center mt-4">Cargando productos...</p>;
 
   return (
-    <div className="container mt-4">
-      <h2>Panel de Administración</h2>
-      <Button className="mb-3" onClick={() => handleShowModal()}>
-        Crear Producto
-      </Button>
+    <div className="admin-container">
+      <h2 className="mb-4 text-center admin-title">
+        Administración de productos
+      </h2>
+      <div className="d-flex justify-content-end mb-4">
+        <Button className="btn-minimal" onClick={() => handleShowModal()}>
+          + Crear Producto
+        </Button>
+      </div>
 
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Imagen</th>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {productos.map((p) => (
-            <tr key={p._id}>
-              <td>
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  style={{ width: "100px", height: "100px", objectFit: "cover" }}
-                />
-              </td>
-              <td>{p.name}</td>
-              <td>{p.description}</td>
-              <td>{p.price}</td>
-              <td>{p.stock}</td>
-              <td>
+      {/* Grid de productos */}
+      <div className="products-grid">
+        {productos.map((p) => (
+          <Card key={p._id} className="product-card">
+            <Card.Img variant="top" src={p.image} className="product-img" />
+            <Card.Body>
+              <Card.Title>{p.name}</Card.Title>
+              <Card.Text className="text-muted small">
+                {p.description || "Sin descripción"}
+              </Card.Text>
+              <p className="fw-bold mb-1">${p.price}</p>
+              <p className="small">Stock: {p.stock}</p>
+              <div className="d-flex justify-content-center gap-2 mt-3">
                 <Button
-                  variant="warning"
+                  variant="primary"
                   size="sm"
+                  className="btn-action"
                   onClick={() => handleShowModal(p)}
                 >
                   Editar
-                </Button>{" "}
+                </Button>
                 <Button
                   variant="danger"
                   size="sm"
+                  className="btn-action"
                   onClick={() => handleDelete(p._id)}
                 >
                   Eliminar
                 </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+              </div>
+            </Card.Body>
+          </Card>
+        ))}
+      </div>
 
       {/* Modal */}
-      <Modal show={showModal} onHide={handleCloseModal}>
+      <Modal show={showModal} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>
             {editProducto ? "Editar Producto" : "Crear Producto"}
@@ -143,80 +139,59 @@ export default function AdminPanel() {
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
-            <Form.Group className="mb-3">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Precio</Form.Label>
-              <Form.Control
-                type="number"
-                value={formData.price}
-                onChange={(e) =>
-                  setFormData({ ...formData, price: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Stock</Form.Label>
-              <Form.Control
-                type="number"
-                value={formData.stock}
-                onChange={(e) =>
-                  setFormData({ ...formData, stock: e.target.value })
-                }
-                required
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Descripción</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-              />
-            </Form.Group>
-
-            {/* 👇 Imagen como link */}
-            <Form.Group className="mb-3">
-              <Form.Label>URL de la Imagen</Form.Label>
-              <Form.Control
-                type="text"
-                value={formData.image}
-                onChange={(e) =>
-                  setFormData({ ...formData, image: e.target.value })
-                }
-              />
-              {formData.image && (
-                <img
-                  src={formData.image}
-                  alt="preview"
-                  style={{
-                    width: "100px",
-                    height: "100px",
-                    marginTop: "10px",
-                    objectFit: "cover",
-                  }}
-                />
-              )}
-            </Form.Group>
+            {["name", "price", "stock", "description", "image"].map((field) => (
+              <Form.Group className="mb-3" key={field}>
+                <Form.Label className="form-label">
+                  {field === "image"
+                    ? "URL de la Imagen"
+                    : field.charAt(0).toUpperCase() + field.slice(1)}
+                </Form.Label>
+                {field !== "description" && field !== "image" ? (
+                  <Form.Control
+                    type={
+                      field === "price" || field === "stock" ? "number" : "text"
+                    }
+                    value={formData[field]}
+                    onChange={(e) =>
+                      setFormData({ ...formData, [field]: e.target.value })
+                    }
+                    required
+                  />
+                ) : field === "description" ? (
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
+                  />
+                ) : (
+                  <>
+                    <Form.Control
+                      type="text"
+                      value={formData.image}
+                      onChange={(e) =>
+                        setFormData({ ...formData, image: e.target.value })
+                      }
+                    />
+                    {formData.image && (
+                      <img
+                        src={formData.image}
+                        alt="preview"
+                        className="product-img-preview mt-2"
+                      />
+                    )}
+                  </>
+                )}
+              </Form.Group>
+            ))}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleCloseModal}>
               Cancelar
             </Button>
-            <Button type="submit" variant="primary">
+            <Button type="submit" className="btn-minimal">
               {editProducto ? "Actualizar" : "Crear"}
             </Button>
           </Modal.Footer>

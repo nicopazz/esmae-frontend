@@ -1,20 +1,33 @@
 .footer {
-  border-top: 1px solid #ddd;
-  background-color: var(--bg);
-  color: var(--text);
+  background-color: #f8f8f8; /* neutro y minimalista */
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
 }
 
-.footer h5 {
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+.footer a {
+  color: #333;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
-.footer-icon {
-  color: var(--text);
-  transition: color 0.3s, transform 0.3s;
+.footer a:hover {
+  color: #007bff; /* hover sutil */
+  transform: scale(1.1);
 }
 
-.footer-icon:hover {
-  color: var(--accent);
-  transform: translateY(-3px);
+.footer p,
+.footer small {
+  margin: 0;
+  font-weight: 300;
+  font-size: 0.75rem;
 }
+
+.footer p.footer-contact,
+.footer p.footer-address {
+  margin-bottom: 0.25rem;
+}
+
+.footer-logo {
+  border-radius: 50%;
+}
+

@@ -36,7 +36,7 @@ export default function AppNavbar() {
             {/* Links de navegación */}
             <Nav className="me-auto">
               <Nav.Link as={NavLink} to="/">
-                Home
+                Catálogo
               </Nav.Link>
               
               <Nav.Link as={NavLink} to="/about">
@@ -66,7 +66,7 @@ export default function AppNavbar() {
                       className="d-flex align-items-center gap-1"
                       style={buttonStyle}
                     >
-                      ADMIN
+                      Panel
                     </Button>
                   )}
 
