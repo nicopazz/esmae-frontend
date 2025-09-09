@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
       api.defaults.headers.common.Authorization = `Bearer ${token}`;
     }
     if (userData) {
-      setUser(JSON.parse(userData));  // 👈 rehidratamos el usuario
+      setUser(JSON.parse(userData));  
     }
 
     setLoading(false);
@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
     // backend devuelve { token, user }
 
     localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user)); // 👈 guardamos user
+    localStorage.setItem('user', JSON.stringify(data.user)); 
 
     api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
     setToken(data.token);
@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('user'); // 👈 limpiamos también user
+    localStorage.removeItem('user'); 
     delete api.defaults.headers.common.Authorization;
     setToken('');
     setUser(null);

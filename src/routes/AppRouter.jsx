@@ -1,7 +1,9 @@
 // src/routes/AppRouter.jsx
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Home from '../pages/Home';
+import About from '../pages/About'; 
 import Login from '../pages/Login';
+import AdminPanel from '../pages/AdminPanel'; // <-- importamos AdminPanel
 import { useAuth } from '../context/AuthContext';
 import MainLayout from '../layouts/MainLayout';
 
@@ -38,6 +40,7 @@ export default function AppRouter() {
       {/* RUTAS PÚBLICAS con MainLayout */}
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} /> 
 
         {/* Login visible solo si NO está autenticado */}
         <Route element={<GuestRoute />}>
@@ -48,7 +51,6 @@ export default function AppRouter() {
       {/* RUTAS PRIVADAS con MainLayout */}
       <Route element={<PrivateRoute />}>
         <Route element={<MainLayout />}>
-          {/* Ejemplo: perfil o pedidos del usuario */}
           <Route path="/perfil" element={<div>Mi Perfil</div>} />
         </Route>
       </Route>
@@ -56,9 +58,7 @@ export default function AppRouter() {
       {/* RUTAS ADMIN con MainLayout */}
       <Route element={<AdminRoute />}>
         <Route element={<MainLayout />}>
-          <Route path="/admin" element={<div>Panel Admin</div>} />
-          {/* Ejemplo: CRUD de productos */}
-          {/* <Route path="/admin/products" element={<ProductsAdmin />} /> */}
+          <Route path="/admin" element={<AdminPanel />} /> {/* <-- ahora renderiza AdminPanel */}
         </Route>
       </Route>
 

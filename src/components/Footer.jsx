@@ -3,6 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import "./footer.css";
 import { BsInstagram, BsWhatsapp, BsEnvelope } from "react-icons/bs";
 import { SiTiktok } from "react-icons/si";
+import Image from "../public/favicon.ico"
 
 
 
@@ -11,8 +12,8 @@ export default function Footer() {
     <footer className="footer bg-light py-4 mt-5">
       <Container>
         <Row className="text-center text-md-start align-items-center">
-          <Col md={6} className="mb-3 mb-md-0">
-            <h5>Esmae</h5>
+          <Col md={6} className="mb-3 mb-md-0 ">
+            <img src={Image} alt="Esmae Logo" width="80" height="80" className="d-inline-block align-top me-2" />
             <p>Transformá tus espacios con espejos modernos y elegantes.</p>
           </Col>
           <Col md={6} className="d-flex justify-content-center justify-content-md-end gap-3">

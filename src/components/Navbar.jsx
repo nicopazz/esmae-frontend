@@ -66,7 +66,7 @@ export default function AppNavbar() {
                       className="d-flex align-items-center gap-1"
                       style={buttonStyle}
                     >
-                      Panel Admin
+                      ADMIN
                     </Button>
                   )}
 

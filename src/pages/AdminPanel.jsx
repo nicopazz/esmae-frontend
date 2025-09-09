@@ -1,118 +1,146 @@
-import { useState, useEffect } from "react";
-import { Table } from "react-bootstrap";
-import ProductoForm from "../components/ProductoForm";
-import api from "../api/client";
-import "../pages/adminPanel.css";
+// src/pages/AdminPanel.jsx
+import { useEffect, useState } from "react";
+import api from "../api/client"; // tu axios configurado
+import { Table, Button, Modal, Form } from "react-bootstrap";
 
 export default function AdminPanel() {
   const [productos, setProductos] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [productoEditar, setProductoEditar] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Traer productos del backend
-  const fetchProductos = async () => {
+  // Para el modal
+  const [showModal, setShowModal] = useState(false);
+  const [editProducto, setEditProducto] = useState(null); 
+  const [formData, setFormData] = useState({ nombre: "", precio: "", stock: "" });
+
+  // Cargar productos
+ const fetchProductos = async () => {
   try {
-    const { data } = await api.get("/products"); // misma ruta que Home
-    console.log("Data recibida del backend:", data); // <--- esto nos dice qué está llegando
-    setProductos(data.products || data); 
-  } catch (error) {
-    console.error("Error al traer productos:", error);
+    const res = await api.get("/products");
+    console.log("Respuesta API:", res.data); 
+    setProductos(res.data.products); 
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
   }
 };
-
 
   useEffect(() => {
     fetchProductos();
   }, []);
 
+  // Abrir modal para crear o editar
+  const handleShowModal = (producto = null) => {
+    setEditProducto(producto);
+    setFormData(
+      producto ? { nombre: producto.name, precio: producto.price, stock: producto.stock } : { nombre: "", precio: "", stock: "" }
+    );
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => setShowModal(false);
+
+  // Crear o actualizar producto
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (editProducto) {
+        await api.put(`/products/${editProducto._id}`, formData);
+      } else {
+        await api.post("/products", formData);
+      }
+      fetchProductos();
+      handleCloseModal();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   // Eliminar producto
-  const eliminarProducto = async (id) => {
+  const handleDelete = async (id) => {
     if (!window.confirm("¿Eliminar este producto?")) return;
     try {
       await api.delete(`/products/${id}`);
-      setProductos(productos.filter((p) => p._id !== id));
-    } catch (error) {
-      console.error("Error al eliminar producto:", error);
+      fetchProductos();
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  // Ocultar/mostrar producto
-  const toggleOculto = async (producto) => {
-    try {
-      await api.put(`/products/${producto._id}`, { oculto: !producto.oculto });
-      setProductos(
-        productos.map((p) =>
-          p._id === producto._id ? { ...p, oculto: !p.oculto } : p
-        )
-      );
-    } catch (error) {
-      console.error("Error al actualizar visibilidad:", error);
-    }
-  };
-
-  // Abrir modal para agregar/editar
-  const abrirModal = (producto = null) => {
-    setProductoEditar(producto);
-    setModalOpen(true);
-  };
-
-  const cerrarModal = () => {
-    setProductoEditar(null);
-    setModalOpen(false);
-    fetchProductos();
-  };
+  if (loading) return <p>Cargando productos...</p>;
 
   return (
-    <div className="admin-panel">
-      <h1>Panel de Administración</h1>
-      <button className="btn agregar-btn" onClick={() => abrirModal()}>
-        Agregar Producto
-      </button>
+    <div className="container mt-4">
+      <h2>Panel de Administración</h2>
+      <Button className="mb-3" onClick={() => handleShowModal()}>
+        Crear Producto
+      </Button>
 
-      <Table striped bordered hover responsive className="mt-3">
+      <Table striped bordered hover>
         <thead>
           <tr>
-            <th>Imagen</th>
             <th>Nombre</th>
             <th>Precio</th>
-            <th>Visible</th>
+            <th>Stock</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {productos.map((p) => (
             <tr key={p._id}>
+              <td>{p.name}</td>
+              <td>{p.price}</td>
+              <td>{p.stock}</td>
               <td>
-                {p.imagenUrl ? (
-                  <img
-                    src={p.imagenUrl}
-                    alt={p.nombre}
-                    className="tabla-img"
-                  />
-                ) : (
-                  "Sin imagen"
-                )}
-              </td>
-              <td>{p.nombre}</td>
-              <td>${p.precio}</td>
-              <td>{p.oculto ? "No" : "Sí"}</td>
-              <td>
-                <button className="btn toggle-btn" onClick={() => toggleOculto(p)}>
-                  {p.oculto ? "Mostrar" : "Ocultar"}
-                </button>
-                <button className="btn editar-btn" onClick={() => abrirModal(p)}>
-                  Editar
-                </button>
-                <button className="btn eliminar-btn" onClick={() => eliminarProducto(p._id)}>
-                  Eliminar
-                </button>
+                <Button variant="warning" size="sm" onClick={() => handleShowModal(p)}>Editar</Button>{" "}
+                <Button variant="danger" size="sm" onClick={() => handleDelete(p._id)}>Eliminar</Button>
               </td>
             </tr>
           ))}
         </tbody>
       </Table>
 
-      {modalOpen && <ProductoForm producto={productoEditar} onClose={cerrarModal} />}
+      {/* Modal para crear/editar */}
+      <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{editProducto ? "Editar Producto" : "Crear Producto"}</Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={handleSubmit}>
+          <Modal.Body>
+            <Form.Group className="mb-3">
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control
+                type="text"
+                value={formData.nombre}
+                onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Precio</Form.Label>
+              <Form.Control
+                type="number"
+                value={formData.precio}
+                onChange={(e) => setFormData({ ...formData, precio: e.target.value })}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Stock</Form.Label>
+              <Form.Control
+                type="number"
+                value={formData.stock}
+                onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
+                required
+              />
+            </Form.Group>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>Cancelar</Button>
+            <Button type="submit" variant="primary">{editProducto ? "Actualizar" : "Crear"}</Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
     </div>
   );
 }
