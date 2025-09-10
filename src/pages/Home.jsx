@@ -92,7 +92,7 @@ export default function Home() {
 
   <Row className="g-4">
     {products.map((prod) => (
-      <Col key={prod._id} xs={12} sm={6} md={4} lg={3}>
+      <Col key={prod._id} xs={6} sm={6} md={4} lg={3}>
         <ProductCard product={prod} />
       </Col>
     ))}

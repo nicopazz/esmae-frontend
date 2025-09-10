@@ -36,26 +36,30 @@ export default function Hero() {
 
         {/* Carrusel a la derecha */}
         <div className="hero-right">
-          <Carousel controls={false} indicators interval={4000}>
+          <Carousel
+            controls={true}
+            indicators={false}
+            interval={4000}
+          >
             <Carousel.Item>
               <img
                 src="https://cinderelladecoracion.com/wp-content/uploads/2022/07/07.-espejos.jpg"
                 alt="Espejo 1"
-                className="hero-image smooth-transition"
+                className="hero-image"
               />
             </Carousel.Item>
             <Carousel.Item>
               <img
                 src="https://blog.rosen.cl/hubfs/espejos-y-decoracion-3.jpg"
                 alt="Espejo 2"
-                className="hero-image smooth-transition"
+                className="hero-image"
               />
             </Carousel.Item>
             <Carousel.Item>
               <img
                 src="https://www.timbrit.com.ar/blog/wp-content/uploads/2020/06/Como-decorar-con-espejos-la-cas.jpg"
                 alt="Espejo 3"
-                className="hero-image smooth-transition"
+                className="hero-image"
               />
             </Carousel.Item>
           </Carousel>

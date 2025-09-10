@@ -1,5 +1,7 @@
 import React from 'react';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
+import { BsWhatsapp } from 'react-icons/bs';
+
 
 export default function ProductCard({ product }) {
   const imageUrl = product.image?.startsWith('http')
@@ -7,6 +9,13 @@ export default function ProductCard({ product }) {
     : product.image
       ? `http://localhost:5000${product.image}`
       : '/no-image.png';
+
+  const handleWhatsApp = () => {
+    const phoneNumber = "5493813921321"; // tu número con código de país
+    const message = `HOLA ESMAE!! Quiero consultar por el producto: ${product.name}`;
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  };
 
   return (
     <Card className="product-card h-100 shadow-sm border-0">
@@ -17,8 +26,16 @@ export default function ProductCard({ product }) {
       <Card.Body className="d-flex flex-column">
         <h5 className="product-title">{product.name}</h5>
         <p className="product-description">{product.description?.substring(0, 80)}</p>
-        <div className="mt-auto">
+        <div className="mt-auto d-flex justify-content-between align-items-center">
           <div className="product-price">${product.price?.toLocaleString('es-AR')}</div>
+          <Button 
+            variant="success" 
+            size="sm" 
+            onClick={handleWhatsApp} 
+            className="d-flex align-items-center"
+          >
+            <BsWhatsapp style={{ marginRight: '4px' }} /> Consulta
+          </Button>
         </div>
       </Card.Body>
     </Card>
