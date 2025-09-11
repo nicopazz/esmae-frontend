@@ -10,7 +10,7 @@ export default function ProductCard({ product }) {
       : '/no-image.png';
 
   const handleWhatsApp = () => {
-    const phoneNumber = "5493813921321";
+    const phoneNumber = "5493812171537";
     const message = `HOLA ESMAE!! Quiero consultar por el producto: ${product.name}`;
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");

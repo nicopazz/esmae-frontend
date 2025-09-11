@@ -48,7 +48,7 @@ export default function Footer() {
 
         {/* Contacto */}
         <p className="footer-contact mb-1">
-          📞 +54 381 3921321 &nbsp; | &nbsp; ✉️ info@esmae.com
+          📞 +54 381 2171537 &nbsp; | &nbsp; ✉️ esmae.espejos@gmail.com
         </p>
 
         {/* Dirección */}
