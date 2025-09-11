@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://esmae-backend-1.onrender.com/api',
 });
 
 // si hay token guardado, lo agregamos al iniciar
