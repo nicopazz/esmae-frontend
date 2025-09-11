@@ -6,7 +6,7 @@ export default function ProductCard({ product }) {
   const imageUrl = product.image?.startsWith('http')
     ? product.image
     : product.image
-      ? `http://localhost:5000${product.image}`
+      ? `https://esmae-backend-1.onrender.com${product.image}`
       : '/no-image.png';
 
   const handleWhatsApp = () => {

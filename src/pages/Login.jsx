@@ -3,7 +3,7 @@ import { Card, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import "../pages/login.css";
+import "../pages/Login.css";
 
 export default function Login() {
   const { login, isAuthenticated } = useAuth();
