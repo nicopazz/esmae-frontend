@@ -4,7 +4,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
 }
 
 /* Card elegante */
@@ -68,4 +67,26 @@
 .login-btn:hover {
   background: #70472c;
   transform: translateY(-2px);
+}
+
+/* Ajuste del input para dejar espacio al ícono */
+.password-input {
+  padding-right: 2.5rem; /* suficiente espacio para el ícono dentro */
+}
+
+/* Ícono dentro del input */
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem; /* ajusta para que quede dentro del input */
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #555;
+  font-size: 1.2rem;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.password-toggle:hover {
+  transform: translateY(-50%) scale(1.2);
+  color: #000;
 }

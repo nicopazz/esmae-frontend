@@ -139,7 +139,7 @@ export default function AdminPanel() {
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
-            {["name", "price", "stock", "description", "image"].map((field) => (
+            {["nombre", "precio", "stock", "descripción", "image"].map((field) => (
               <Form.Group className="mb-3" key={field}>
                 <Form.Label className="form-label">
                   {field === "image"

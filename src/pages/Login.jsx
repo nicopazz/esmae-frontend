@@ -1,16 +1,18 @@
-import { useState } from 'react';
-import { Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
-import { useNavigate, Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import '../pages/login.css';
+import { useState } from "react";
+import { Card, Form, Button, Alert, Spinner } from "react-bootstrap";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import "../pages/login.css";
 
 export default function Login() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const [loadingSubmit, setLoadingSubmit] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
@@ -22,21 +24,21 @@ export default function Login() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     if (!form.email || !form.password) {
-      setError('Completá email y contraseña');
+      setError("Completá email y contraseña");
       return;
     }
 
     try {
       setLoadingSubmit(true);
       await login(form.email, form.password);
-      navigate('/');
+      navigate("/");
     } catch (err) {
       console.error(err);
       setError(
         err?.response?.data?.message ||
-          'Credenciales inválidas o error al iniciar sesión'
+          "Credenciales inválidas o error al iniciar sesión"
       );
     } finally {
       setLoadingSubmit(false);
@@ -65,22 +67,32 @@ export default function Login() {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-3" style={{ position: "relative" }}>
               <Form.Label className="login-label">Contraseña</Form.Label>
               <Form.Control
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Tu contraseña"
                 value={form.password}
                 onChange={onChange}
                 required
-                className="login-input"
+                className="login-input password-input"
               />
+              <div
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="password-toggle"
+              >
+                {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+              </div>
             </Form.Group>
 
             <div className="d-grid">
-              <Button type="submit" className="login-btn" disabled={loadingSubmit}>
-                {loadingSubmit ? <Spinner size="sm" /> : 'Entrar'}
+              <Button
+                type="submit"
+                className="login-btn"
+                disabled={loadingSubmit}
+              >
+                {loadingSubmit ? <Spinner size="sm" /> : "Entrar"}
               </Button>
             </div>
           </Form>

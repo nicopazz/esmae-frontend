@@ -34,6 +34,7 @@ export function AuthProvider({ children }) {
     api.defaults.headers.common.Authorization = `Bearer ${data.token}`;
     setToken(data.token);
     setUser(data.user);
+    alert(`Bienvenido, ${data.user.nombre}!`);
     return data.user;
   };
 
@@ -43,6 +44,7 @@ export function AuthProvider({ children }) {
     delete api.defaults.headers.common.Authorization;
     setToken('');
     setUser(null);
+    alert("Has cerrado sesión");
   };
 
   const isAuthenticated = !!token;
