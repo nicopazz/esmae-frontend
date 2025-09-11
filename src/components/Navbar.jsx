@@ -13,6 +13,14 @@ export default function AppNavbar() {
     fontWeight: "300",
   };
 
+  // Función para hacer scroll al footer
+  const handleScrollToFooter = () => {
+    const footer = document.querySelector("footer"); // Busca el footer
+    if (footer) {
+      footer.scrollIntoView({ behavior: "smooth" }); // Scroll suave
+    }
+  };
+
   return (
     <>
       {/* Topbar */}
@@ -38,11 +46,13 @@ export default function AppNavbar() {
               <Nav.Link as={NavLink} to="/">
                 Catálogo
               </Nav.Link>
-              
+
               <Nav.Link as={NavLink} to="/about">
                 Nosotros
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/contact">
+
+              {/* Botón contacto con scroll */}
+              <Nav.Link onClick={handleScrollToFooter} style={{ cursor: "pointer" }}>
                 Contacto
               </Nav.Link>
             </Nav>
