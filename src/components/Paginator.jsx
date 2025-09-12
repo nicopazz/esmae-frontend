@@ -1,4 +1,5 @@
 import { Pagination } from 'react-bootstrap';
+import "./Paginator.css";
 
 export default function Paginator({ page, pages, onChange }) {
   if (pages <= 1) return null;

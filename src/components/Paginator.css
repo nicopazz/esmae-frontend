@@ -1,0 +1,39 @@
+/* Paginador centrado */
+.pagination {
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+/* Botones normales (números y prev/next) */
+.pagination .page-item .page-link {
+  color: var(--accent-dark);           /* texto marrón */
+  background-color: #fff;              /* fondo blanco */
+  border: 1px solid var(--accent-dark); /* borde marrón */
+  border-radius: 8px;
+  padding: 0.4rem 0.65rem;
+  transition: all 0.2s ease;
+  min-width: 38px;                     /* ancho mínimo para uniformidad */
+  text-align: center;
+}
+
+/* Hover de cualquier botón */
+.pagination .page-item .page-link:hover {
+  background-color: #000000; /* verde moderno */
+  color: #fff;
+  border-color: #000000;
+}
+
+/* Página activa */
+.pagination .page-item.active .page-link {
+  background-color: var(--accent); /* marrón principal */
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Botones deshabilitados */
+.pagination .page-item.disabled .page-link {
+  color: var(--muted);
+  pointer-events: none;
+  background-color: #f8f8f8;
+  border-color: #ddd;
+}

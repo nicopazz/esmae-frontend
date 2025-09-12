@@ -5,6 +5,7 @@
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   background-color: var(--card, #f9f2e8);
+  max-height: 360px; /* card más corta */
 }
 
 .product-card:hover {
@@ -13,7 +14,6 @@
 
 .product-image-wrapper {
   padding: 8px;
-  background-color: #f8f8f8;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,23 +21,38 @@
 
 .product-image {
   width: 100%;
-  height: 200px;
+  height: 180px; /* un poco más baja */
   object-fit: cover;
   border-radius: 6px;
 }
 
 /* ----- Texto y precio ----- */
+.product-body {
+  padding-top: 6px; /* menos espacio superior */
+  padding-bottom: 8px; /* menos espacio inferior */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .product-title {
-  font-size: 1rem;
+  font-size: 0.95rem; /* tamaño más acorde */
   font-weight: 600;
   margin-bottom: 0.25rem;
   color: #333;
 }
 
 .product-description {
-  font-size: 0.875rem;
+  font-size: 0.75rem; /* más chica */
   color: #555;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  flex-shrink: 0;
+}
+
+.product-stock {
+  font-size: 0.75rem; /* mismo tamaño que la descripción */
+  margin-bottom: 0.25rem;
+  color: #555;
 }
 
 .product-price {
@@ -62,6 +77,7 @@
 @media (max-width: 576px) {
   .product-card {
     margin: 4px;
+    max-height: 340px; /* un poco más corta en mobile */
   }
 
   .product-image {
@@ -72,8 +88,9 @@
     font-size: 0.9rem;
   }
 
-  .product-description {
-    font-size: 0.75rem;
+  .product-description,
+  .product-stock {
+    font-size: 0.7rem;
   }
 
   .product-price {
@@ -83,5 +100,17 @@
   .btn-success {
     font-size: 0.7rem;
     padding: 0.2rem 0.4rem;
+  }
+
+  /* Flex-wrap en mobile para que el botón baje debajo del precio */
+  .product-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px; /* espacio entre precio y botón */
+  }
+
+  .product-button {
+    width: 100%; /* botón ocupa todo el ancho */
+    justify-content: center; /* centrar texto e icono */
   }
 }

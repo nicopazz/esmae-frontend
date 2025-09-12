@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { BsWhatsapp } from 'react-icons/bs';
+import './ProductCard.css';
 
 export default function ProductCard({ product }) {
   const imageUrl = product.image?.startsWith('http')
@@ -25,11 +26,11 @@ export default function ProductCard({ product }) {
         <img src={imageUrl} alt={product.name} className="product-image" />
       </div>
 
-      <Card.Body className="d-flex flex-column">
+      <Card.Body className="d-flex flex-column product-body">
         <h5 className="product-title">{product.name}</h5>
         <p className="product-description">{product.description?.substring(0, 80)}</p>
 
-        <p className="mb-2">
+        <p className="mb-2 product-stock">
           {product.stock > 0 ? (
             <>Stock: {product.stock}</>
           ) : (
@@ -37,13 +38,13 @@ export default function ProductCard({ product }) {
           )}
         </p>
 
-        <div className="mt-auto d-flex justify-content-between align-items-center">
+        <div className="product-footer d-flex justify-content-between align-items-center flex-wrap">
           <div className="product-price">${product.price?.toLocaleString('es-AR')}</div>
           <Button
             variant="success"
             size="sm"
             onClick={handleWhatsApp}
-            className="d-flex align-items-center"
+            className="d-flex align-items-center product-button"
             disabled={product.stock <= 0}
           >
             <BsWhatsapp style={{ marginRight: '4px' }} /> Consulta
