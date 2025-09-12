@@ -5,15 +5,19 @@
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   background-color: var(--card, #f9f2e8);
-  max-height: 360px; /* card más corta */
+  max-height: 380px; /* un poco más larga */
 }
 
 .product-card:hover {
   transform: translateY(-4px);
 }
 
+/* ----- Contenedor de la imagen ----- */
 .product-image-wrapper {
-  padding: 8px;
+  width: 100%;
+  height: 180px; /* altura fija desktop */
+  overflow: hidden;
+  border-radius: 4px 4px 0 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,36 +25,39 @@
 
 .product-image {
   width: 100%;
-  height: 180px; /* un poco más baja */
+  height: 100%; /* ocupa todo el contenedor */
   object-fit: cover;
-  border-radius: 6px;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
 }
 
 /* ----- Texto y precio ----- */
 .product-body {
-  padding-top: 6px; /* menos espacio superior */
-  padding-bottom: 8px; /* menos espacio inferior */
+  padding-top: 6px;
+  padding-bottom: 8px;
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
 .product-title {
-  font-size: 0.95rem; /* tamaño más acorde */
+  font-size: 0.95rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
   color: #333;
 }
 
 .product-description {
-  font-size: 0.75rem; /* más chica */
+  font-size: 0.75rem;
   color: #555;
   margin-bottom: 0.25rem;
-  flex-shrink: 0;
 }
 
 .product-stock {
-  font-size: 0.75rem; /* mismo tamaño que la descripción */
+  font-size: 0.75rem;
   margin-bottom: 0.25rem;
   color: #555;
 }
@@ -73,15 +80,28 @@
   margin-right: 4px;
 }
 
+/* ----- Footer: precio y botón ----- */
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: auto; /* pega al final */
+}
+
 /* ----- Responsivo para mobile ----- */
 @media (max-width: 576px) {
   .product-card {
     margin: 4px;
-    max-height: 340px; /* un poco más corta en mobile */
+    max-height: 360px; /* un poco más larga que antes */
+  }
+
+  .product-image-wrapper {
+    height: 150px;
   }
 
   .product-image {
-    height: 150px;
+    height: 100%;
   }
 
   .product-title {
@@ -102,15 +122,14 @@
     padding: 0.2rem 0.4rem;
   }
 
-  /* Flex-wrap en mobile para que el botón baje debajo del precio */
   .product-footer {
     flex-direction: column;
     align-items: flex-start;
-    gap: 6px; /* espacio entre precio y botón */
+    gap: 6px;
   }
 
   .product-button {
-    width: 100%; /* botón ocupa todo el ancho */
-    justify-content: center; /* centrar texto e icono */
+    width: 100%;
+    justify-content: center;
   }
 }
